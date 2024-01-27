@@ -54,7 +54,7 @@ async function mongoDisconnect() {
 
 async function mongoVectorSearch(embedding, numCandidates, limit) {
     try {
-        const collection = mongoose.connection.collection('fonts');
+        const collection = mongoose.connection.collection('posts');
 
         // Log the embedding to check its structure
         //console.log("Embedding:", embedding);
@@ -75,7 +75,7 @@ async function mongoVectorSearch(embedding, numCandidates, limit) {
         return fontCandidates;
 
     } catch (err) {
-        console.error('Failed to vector search for similar fonts:', err.message);
+        console.error('Failed to vector search for similar posts:', err.message);
         // Rethrow the error or return a specific response
         throw err; // or throw err; // depending on your application's error handling strategy
     }

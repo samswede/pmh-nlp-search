@@ -5,26 +5,11 @@ require('dotenv').config();
 const app = require('./app');
 
 // import services, e.g. database connection
+const { openAiConnect } = require('./services/openAI');
 
-/*
-TO DO:
-    - modify mongo connect to connect to vector database rather than normal database
-*/
 const { mongoConnect } = require('./services/mongo');
 
-
-
-
-// import models, e.g. data, ONNX models, etc.
-/*
-TO DO:
-    - load font data to vector database (if not already loaded)
-    - load ONNX model on server start
-*/
-const { loadFontsData } = require('./models/fonts.model');
-//const { loadEncoderModel } = require('./models/encoder.model');
-
-
+const { loadPostsData } = require('./models/posts.model');
 
 
 const PORT = process.env.PORT || 8000;
@@ -47,10 +32,10 @@ async function startServer() {
     
     await mongoConnect();
 
-    await loadFontsData();
+    // const openAiConnection = await openAiConnect();
 
-    // wait for the model to load
-    //await loadEncoderModel();
+    // await loadPostsData(openAiConnection);
+
 
     server.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}...`);

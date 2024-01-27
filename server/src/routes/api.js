@@ -1,7 +1,7 @@
 const express = require('express');
 
 // import the routers.
-const fontsRouter = require('./fonts/fonts.router');
+const postsRouter = require('./posts/posts.router');
 //const encoderRouter = require('./encoder/encoder.router');
 
 
@@ -18,7 +18,7 @@ const fontsRouter = require('./fonts/fonts.router');
 
 const api = express.Router();
 
-api.use('/fonts', fontsRouter);
+api.use('/posts', postsRouter);
 //api.use('/encoder', encoderRouter);
 
 
