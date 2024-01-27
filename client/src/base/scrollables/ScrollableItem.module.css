@@ -1,0 +1,54 @@
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: var(--nextui-border-lg);
+    width: 100%; /* Adjust the width as necessary */
+    box-sizing: border-box; /* Make sure padding doesn't affect the total width */
+  }
+
+
+.content {
+    display: grid;
+    grid-template-columns: 0.3fr 1fr;
+    align-items: center;
+    column-gap: 20px;
+}
+
+  .text {
+    flex-grow: 1;
+    padding-right: 20px; /* Give some space between the text and the image */
+  }
+
+
+  .text h2 {
+    margin: 0;
+    font-size: 1.5rem; /* Adjust the size as necessary */
+    text-align: left;
+
+  }
+  
+  .text p {
+    margin: 0;
+    font-size: var(--nextui-font-size-small); /* Adjust the size as necessary */
+    color: #666666; /* Lighter color for the description */
+    text-align: left;
+  }
+  
+  /* You may need to adjust the following Image styles to better fit your layout */
+  .roleImage {
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+  }
+  
+  /* If you have a specific class or identifier for the image container, use that instead */
+  /* For instance, if <div className={styles.imageContainer}> wraps the <Image />, then: */
+  .imageContainer {
+    flex-shrink: 0; /* Prevents the image container from shrinking */
+    width: 100%; /* Fixed width */
+    height: auto;
+    border-radius: var(--nextui-border-lg); /* Makes the image container round */
+    overflow: hidden; /* Ensures nothing overflows from the container */
+  }
+  

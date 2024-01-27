@@ -1,0 +1,23 @@
+.scrollable {
+    max-height: 500px; /* Set a maximum height for the scrolling area */
+    overflow-y: auto; /* Enables vertical scrolling if content overflows */
+    
+    --scroll-shadow-size: 40px; /* Default shadow size */
+    --scroll-shadow-offset: 0px; /* Default shadow offset */
+    --scroll-shadow-visibility: auto; /* Default visibility setting */
+    
+}
+
+.flex {
+    display: flex;
+    flex-direction: column; /* Aligns children in a horizontal row */
+    gap: 20px; /* Space between items */
+}
+
+/* Additional styles for ScrollableItem if needed */
+.scrollableItem {
+    /* Styles for individual scrollable items */
+    flex: none; /* Prevents the items from growing or shrinking */
+    margin: 10px; /* Adds margin around items */
+    min-width: 250px; /* Minimum width for each item to maintain layout */
+}
