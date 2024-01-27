@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { collection } = require('../models/fonts.mongo');
 
 // this is only added here for our tests to work
 require('dotenv').config();

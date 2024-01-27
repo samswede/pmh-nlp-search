@@ -1,43 +1,40 @@
-const { Configuration, OpenAIApi } = require('openai')
-require('dotenv').config()
+const { Configuration, OpenAIApi } = require('openai');
+require('dotenv').config();
 
-// Unsure if I have to create the connection here, or in the server.js file...
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
-async function openAiConnect() {
-    const configuration = new Configuration({
-        apiKey: process.env.OPENAI_API_KEY,
-      })
-      
-    const openAiConnection = new OpenAIApi(configuration)
-      
-    return openAiConnection;
-      
-}
+const openAiConnection = new OpenAIApi(configuration);
 
-const openAiConnection = await openAiConnect();
-
-
+async function testOpenAiConnection() {
+    try {
+      console.log('Testing connection to OpenAI API...');
+      const response = await openai.listEngines();
+      console.log(response.data);
+      console.log('Connection to OpenAI API successful!');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
 
 async function embeddTextAda(text) {
     const embeddingResponse = await openAiConnection.createEmbedding({
       model: 'text-embedding-ada-002',
-      input: text,
-    })
-    const [{ embedding }] = embeddingResponse?.data?.data
+      input: [text], // Ensure input is an array
+    });
+    const [{ embedding }] = embeddingResponse.data;
   
-    console.log('embedding', embedding)
+    console.log('embedding', embedding);
   
-    return embedding
-  }
-  
+    return embedding;
+}
 
 async function generateTextGPT(prompt) {
-    const response = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo-16k',
-      stream: false,
-      temperature: 0.5,
-      messages: [
-        {
+    const response = await openAiConnection.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: [{
           role: 'system',
           content: 'You are a helpful assistant.',
         },
@@ -46,16 +43,13 @@ async function generateTextGPT(prompt) {
           content: prompt,
         },
       ],
-    })
+    });
   
-    // console.log('response', response?.data?.choices[0]?.message?.content)
-    return response?.data?.choices[0]?.message?.content
-  }
-  
-
+    return response.data.choices[0].message.content;
+}
 
 module.exports = {
-    openAiConnect,
+    testOpenAiConnection,
     embeddTextAda,
     generateTextGPT
 };

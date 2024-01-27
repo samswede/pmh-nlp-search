@@ -5,7 +5,7 @@ require('dotenv').config();
 const app = require('./app');
 
 // import services, e.g. database connection
-const { openAiConnect } = require('./services/openAI');
+const { testOpenAiConnection } = require('./services/openAI');
 
 const { mongoConnect } = require('./services/mongo');
 
@@ -29,12 +29,14 @@ We could be loading a database, or a file, or anything else that takes time to l
 
 async function startServer() {
     // wait for the database to load
+
+    await testOpenAiConnection();
     
     await mongoConnect();
 
     // const openAiConnection = await openAiConnect();
 
-    // await loadPostsData(openAiConnection);
+    await loadPostsData();
 
 
     server.listen(PORT, () => {
