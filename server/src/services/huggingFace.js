@@ -60,10 +60,9 @@ async function embeddTextHF(text) {
         
         //console.log(`Raw Embedding: ${output}`);
 
-        const [embedding] = output.tolist(); // this has also converted it into a string somehow...
+        const [embedding] = output.tolist(); 
 
         //console.log(`Embedding: ${embedding}`);
-        // i need to see the shape of the embedding
 
         //console.log(`Shape of embedding: ${embedding.shape}`);
 

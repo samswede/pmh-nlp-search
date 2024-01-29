@@ -27,9 +27,9 @@ function loadPostsData() {
 
                 for (const post of postsCollectionData) {
 
-                    // just test embedding with 5 posts (to save money)
+                    // just test embedding with 5 posts
                     i++;
-                    if (i > 30) {
+                    if (i > 400) {
                         break;
                     }
 
@@ -116,8 +116,14 @@ async function getSimilarPostsFromEmbedding(embedding, numCandidates, limit) {
 async function getSimilarPostsFromTitle(title, numCandidates, limit) {
     const post = await getPostFromTitle(title);
     const embedding = post.embedding;
-    const fontCandidates = await mongoVectorSearch(embedding, numCandidates, limit);
-    return fontCandidates;
+    const postCandidates = await mongoVectorSearch(embedding, numCandidates, limit);
+    return postCandidates;
+}
+
+async function getSimilarPostsFromText(text, numCandidates, limit) {
+    const embedding = await embeddTextHF(text);
+    const postCandidates = await mongoVectorSearch(embedding, numCandidates, limit);
+    return postCandidates;
 }
   
 async function savePost(post) {
@@ -151,4 +157,5 @@ module.exports = {
     getPostFromTitle,
     getSimilarPostsFromEmbedding,
     getSimilarPostsFromTitle,
+    getSimilarPostsFromText,
     };

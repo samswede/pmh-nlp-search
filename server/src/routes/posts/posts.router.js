@@ -5,7 +5,8 @@ const {
     httpGetAllPostsTitles,
     httpGetPostFromTitle,
     httpGetSimilarPostsFromEmbedding,
-    httpGetSimilarPostsFromTitle } = require('./posts.controller');
+    httpGetSimilarPostsFromTitle,
+    httpGetSimilarPostsFromText } = require('./posts.controller');
 
 const postsRouter = express.Router();
 
@@ -17,5 +18,6 @@ postsRouter.get('/title', httpGetPostFromTitle);
 
 postsRouter.post('/query-embedding', httpGetSimilarPostsFromEmbedding);
 postsRouter.post('/query-title', httpGetSimilarPostsFromTitle);
+postsRouter.post('/query-text', httpGetSimilarPostsFromText);
 
 module.exports = postsRouter;

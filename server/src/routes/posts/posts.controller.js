@@ -2,7 +2,8 @@ const { getAllPosts,
         getAllPostsTitles,
         getPostFromTitle,
         getSimilarPostsFromEmbedding,
-        getSimilarPostsFromTitle } = require('../../models/posts.model');
+        getSimilarPostsFromTitle,
+        getSimilarPostsFromText } = require('../../models/posts.model');
 
 /*
 TO DO:
@@ -51,6 +52,20 @@ async function httpGetSimilarPostsFromTitle(req, res) {
     }
 }
 
+async function httpGetSimilarPostsFromText(req, res) {
+    try {
+        const text = req.body.text;
+        const numCandidates = req.body.numCandidates;
+        const limit = req.body.limit;
+        const postCandidates = await getSimilarPostsFromText(text, numCandidates, limit);
+        return res.status(200).json(postCandidates);
+    
+    } catch(err) {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+}
+
 
 
 
@@ -60,4 +75,5 @@ module.exports = {
     httpGetPostFromTitle,
     httpGetSimilarPostsFromEmbedding,
     httpGetSimilarPostsFromTitle,
+    httpGetSimilarPostsFromText
 };
