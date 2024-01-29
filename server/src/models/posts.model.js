@@ -9,56 +9,51 @@ const { textEmbeddingAda } = require('../services/openAI');
 
 function loadPostsData() {
 
-    if (areAllPostsLoaded()) {
-        return;
-    }
+    console.log('Loading posts...');
 
-    else {
-        console.log('Loading posts...');
+    return new Promise((resolve, reject) => {
+        fs.readFile(path.join(__dirname, '..', '..', 'data', 'posts_collection_data.json'), 'utf8', async (err, data) => {
+            if (err) {
+                console.error(err);
+                return reject(err);
+            }
 
-        return new Promise((resolve, reject) => {
-            fs.readFile(path.join(__dirname, '..', '..', 'data', 'posts_collection_data.json'), 'utf8', async (err, data) => {
-                if (err) {
-                    console.error(err);
-                    return reject(err);
-                }
+            try {
+                const postsCollectionData = JSON.parse(data);
 
-                try {
-                    const postsCollectionData = JSON.parse(data);
+                // just test embedding with 5 posts (to save money)
+                let i = 0.0; // i need this to be a float for the embedding
+
+                for (const post of postsCollectionData) {
 
                     // just test embedding with 5 posts (to save money)
-                    let i = 0;
-
-                    for (const post of postsCollectionData) {
-
-                        // just test embedding with 5 posts (to save money)
-                        i++;
-                        if (i > 5) {
-                            break;
-                        }
-
-                        // get embedding for each post
-                        const embedding = await textEmbeddingAda(post.description);
-
-                        // add fields to each post
-                        post.index = i;
-                        post.embedding = embedding;
-
-                        // save each post to the mongo vector database
-                        await savePost(post);
-                        
-                        console.log(`Post ${i} saved!`);
+                    i++;
+                    if (i > 30) {
+                        break;
                     }
-                    const countPostsFound = await getAllPosts();
-                    console.log(`${countPostsFound.length} posts found!`);
-                    resolve();
-                } catch (parseErr) {
-                    console.error(parseErr);
-                    reject(parseErr);
+
+                    // get embedding for each post
+                    const embedding = Array(3).fill(0.1+i); // test embedding
+                    //const embedding = await textEmbeddingAda(post.description);
+
+                    // add fields to each post
+                    post.index = i;
+                    post.embedding = embedding;
+
+                    // save each post to the mongo vector database
+                    await savePost(post);
+                    
+                    console.log(`Post ${i} saved!`);
                 }
-            });
+                const countPostsFound = await getAllPosts();
+                console.log(`${countPostsFound.length} posts found!`);
+                resolve();
+            } catch (parseErr) {
+                console.error(parseErr);
+                reject(parseErr);
+            }
         });
-    }
+    });
 }
 
 async function areAllPostsLoaded() {
@@ -148,6 +143,7 @@ async function savePost(post) {
 
 module.exports = {
     loadPostsData,
+    areAllPostsLoaded,
     getAllPosts,
     getAllPostsTitles,
     getPostFromTitle,

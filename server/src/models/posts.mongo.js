@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const postsSchema = new mongoose.Schema({
+        index: {
+            type: Number,
+            required: true,
+            unique: true
+            },
+
         title: {
             type: String,
             required: false,
@@ -32,7 +38,8 @@ const postsSchema = new mongoose.Schema({
             
         embedding: {
             type: [Number],
-            required: true,
+            required: false,
+            default: Array(3).fill(0)
             },
 });
 

@@ -61,7 +61,7 @@ async function mongoVectorSearch(embedding, numCandidates, limit) {
         const fontCandidates = await collection.aggregate([
             {
               "$vectorSearch": {
-                "index": "default",
+                "index": "vector_index",
                 "path": "embedding",
                 "queryVector": embedding,
                 "numCandidates": numCandidates,

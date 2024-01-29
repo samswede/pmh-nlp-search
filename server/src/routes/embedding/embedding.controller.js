@@ -1,6 +1,7 @@
 //const { getTextEmbeddingAda } = require('../../models/embedding.model');
 const { textEmbeddingAda } = require('../../services/openAI');
 
+
 async function httpGetTextEmbeddingAda(req, res) {
     try {
         const text = req.body.text;
