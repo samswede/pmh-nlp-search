@@ -4,7 +4,8 @@ const path = require('path');
 const posts = require('./posts.mongo');  
 
 const { mongoVectorSearch } = require('../services/mongo');
-const { textEmbeddingAda } = require('../services/openAI');
+//const { embeddTextAda } = require('../services/openAI');
+const { embeddTextHF } = require('../services/huggingFace');
 
 
 function loadPostsData() {
@@ -33,8 +34,9 @@ function loadPostsData() {
                     }
 
                     // get embedding for each post
-                    const embedding = Array(3).fill(0.1+i); // test embedding
-                    //const embedding = await textEmbeddingAda(post.description);
+                    //const embedding = Array(3).fill(0.1+i); // test embedding
+                    //const embedding = await embeddTextAda(post.description);
+                    const embedding = await embeddTextHF(post.description);
 
                     // add fields to each post
                     post.index = i;
@@ -136,7 +138,7 @@ async function savePost(post) {
     )
 
   } catch(err) {
-    console.error(`Could not save font because: ${err}`);
+    console.error(`Could not save post because: ${err}`);
   }
 };
   

@@ -8,6 +8,8 @@ const app = require('./app');
 const { testAdaModel,
         testGenerateText } = require('./services/openAI');
 
+const { createGlobalEmbeddingPipeline } = require('./services/huggingFace');
+
 const { mongoConnect } = require('./services/mongo');
 
 const { loadPostsData,
@@ -37,6 +39,11 @@ async function startServer() {
     await mongoConnect();
 
     // const openAiConnection = await openAiConnect();
+
+    // make the global variable so that we can use it in the embeddTextHF function
+    // this prevents us from having to create the pipeline every time we want to embed text
+    // perhaps there is a better way to do this? Global variables are not recommended...
+    await createGlobalEmbeddingPipeline();
 
     if (await areAllPostsLoaded()) {
         console.log('Skipping loading posts...');
