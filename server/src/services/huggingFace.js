@@ -86,8 +86,8 @@ async function generateTextHF(userPrompt, systemPrompt, context) {
 
     // Define the list of messages
     const messages = [
-        { "role": "system", "content": systemPrompt+context },
         { "role": "user", "content": userPrompt },
+        { "role": "system", "content": systemPrompt+context },
     ]
     
     // Construct the prompt
@@ -97,13 +97,13 @@ async function generateTextHF(userPrompt, systemPrompt, context) {
     
     // Generate a response
     const result = await global.generationPipeline(prompt, {
-        max_new_tokens: 256,
+        max_new_tokens: 150,
         temperature: 0.7,
         do_sample: true,
-        top_k: 50,
+        top_k: 20, // 50
     });
 
-    console.log(result);
+    //console.log(result);
     // [
     //   {
     //     generated_text: '<|system|>\n' +
@@ -123,7 +123,7 @@ async function generateTextHF(userPrompt, systemPrompt, context) {
     // Extract the response
     const extracted_generated_text = result[0].generated_text.split('<|assistant|>')[1].trim();
 
-    console.log(`extracted generated text: ${extracted_generated_text}`);
+    console.log(`Generated text: ${extracted_generated_text}`);
 
     return extracted_generated_text;
 

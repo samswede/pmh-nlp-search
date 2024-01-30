@@ -5,7 +5,7 @@ const {
 
 const generationRouter = express.Router();
 
-generationRouter.get('/hf', httpPostGenerateTextHF);
+generationRouter.post('/hf', httpPostGenerateTextHF);
 
 
 module.exports = generationRouter;
