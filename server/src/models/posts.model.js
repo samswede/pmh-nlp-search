@@ -94,11 +94,18 @@ async function getAllPostsTitles() {
     }
 
 async function getPostFromTitle(title) {
-    return await fonts.findOne({ title: title }, {
+    return await posts.findOne({ title: title }, {
       '_id': 0, 
       '__v': 0,
     }); // exclude the _id and __v fields
     };
+
+async function getPostFromIndex(index) {
+  return await posts.findOne({ index: index }, {
+    '_id': 0, 
+    '__v': 0,
+  }); // exclude the _id and __v fields
+  };
 
 
 
@@ -118,6 +125,13 @@ async function getSimilarPostsFromTitle(title, numCandidates, limit) {
     const embedding = post.embedding;
     const postCandidates = await mongoVectorSearch(embedding, numCandidates, limit);
     return postCandidates;
+}
+
+async function getSimilarPostsFromIndex(index, numCandidates, limit) {
+  const post = await getPostFromIndex(index);
+  const embedding = post.embedding;
+  const postCandidates = await mongoVectorSearch(embedding, numCandidates, limit);
+  return postCandidates;
 }
 
 async function getSimilarPostsFromText(text, numCandidates, limit) {
@@ -155,7 +169,9 @@ module.exports = {
     getAllPosts,
     getAllPostsTitles,
     getPostFromTitle,
+    getPostFromIndex,
     getSimilarPostsFromEmbedding,
     getSimilarPostsFromTitle,
+    getSimilarPostsFromIndex,
     getSimilarPostsFromText,
     };

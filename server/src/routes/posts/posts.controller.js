@@ -1,8 +1,10 @@
 const { getAllPosts,
         getAllPostsTitles,
         getPostFromTitle,
+        getPostFromIndex,
         getSimilarPostsFromEmbedding,
         getSimilarPostsFromTitle,
+        getSimilarPostsFromIndex,
         getSimilarPostsFromText } = require('../../models/posts.model');
 
 /*
@@ -22,6 +24,11 @@ async function httpGetAllPostsTitles(req, res) {
 async function httpGetPostFromTitle(req, res) {
     const post = req.body;
     return res.status(200).json(await getPostFromTitle(post.title));
+}
+
+async function httpGetPostFromIndex(req, res) {
+    const post = req.body;
+    return res.status(200).json(await getPostFromIndex(post.index));
 }
 
 async function httpGetSimilarPostsFromEmbedding(req, res) {
@@ -52,6 +59,20 @@ async function httpGetSimilarPostsFromTitle(req, res) {
     }
 }
 
+async function httpGetSimilarPostsFromIndex(req, res) {
+    try {
+        const index = req.body.index;
+        const numCandidates = req.body.numCandidates;
+        const limit = req.body.limit;
+        const postCandidates = await getSimilarPostsFromIndex(index, numCandidates, limit);
+        return res.status(200).json(postCandidates);
+    
+    } catch(err) {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+}
+
 async function httpGetSimilarPostsFromText(req, res) {
     try {
         const text = req.body.text;
@@ -73,7 +94,9 @@ module.exports = {
     httpGetAllPosts,
     httpGetAllPostsTitles,
     httpGetPostFromTitle,
+    httpGetPostFromIndex,
     httpGetSimilarPostsFromEmbedding,
     httpGetSimilarPostsFromTitle,
+    httpGetSimilarPostsFromIndex,
     httpGetSimilarPostsFromText
 };

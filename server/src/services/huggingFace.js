@@ -11,13 +11,19 @@ async function loadTransformers() {
     return pipeline;
   }
   
-  async function createGlobalEmbeddingPipeline() {
-      const pipeline = await loadTransformers();
-      const embeddingPipeline = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-      global.embeddingPipeline = embeddingPipeline;
+async function createGlobalPipelines() {
+    const pipeline = await loadTransformers();
 
-      console.log('Created global embedding pipeline');
-  }
+    const embeddingPipeline = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+    global.embeddingPipeline = embeddingPipeline;
+
+    console.log('Created global embedding pipeline');
+
+    const generationPipeline = await pipeline('text-generation', 'Xenova/TinyLlama-1.1B-Chat-v1.0');
+    global.generationPipeline = generationPipeline;
+
+    console.log('Created global generation pipeline');
+}
   
   // Then you can use createGlobalEmbeddingPipeline() in your server initialization code.
   
@@ -74,8 +80,57 @@ async function embeddTextHF(text) {
     
   }
 
+async function generateTextHF(userPrompt, systemPrompt, context) {
+    // xenova/TinyLlama-1.1B-Chat-v1.0
+    // assumes global variable pipeline has been created
+
+    // Define the list of messages
+    const messages = [
+        { "role": "system", "content": systemPrompt+context },
+        { "role": "user", "content": userPrompt },
+    ]
+    
+    // Construct the prompt
+    const prompt = global.generationPipeline.tokenizer.apply_chat_template(messages, {
+        tokenize: false, add_generation_prompt: true,
+    });
+    
+    // Generate a response
+    const result = await global.generationPipeline(prompt, {
+        max_new_tokens: 256,
+        temperature: 0.7,
+        do_sample: true,
+        top_k: 50,
+    });
+
+    console.log(result);
+    // [
+    //   {
+    //     generated_text: '<|system|>\n' +
+    //       'You are a friendly assistant.\n' +
+    //       '<|user|>\n' +
+    //       'Explain thermodynamics in simple terms.\n' +
+    //       '<|assistant|>\n' +
+    //       'Thermodynamics is a branch of physics that deals with the study of heat and its transfer, including the relationship between matter and energy, the concept of chemical equilibrium, and the effects of temperature on chemical and physical processes. In thermodynamics, the properties of matter (such as heat capacity, specific heat, and entropy) are considered and their behavior is studied in relation to the temperature.\n\n' +
+    //       'Here are some simple steps to explain thermodynamics in simple terms:\n\n' +
+    //       '1. Energy: Energy is the ability to do work. It is the ability to transfer heat or do other thermodynamic processes. Some common forms of energy are heat, light, electricity, and chemical energy.\n\n' +
+    //       '2. Heat: Heat is a form of energy that can be transferred from one place to another. It is the ability to induce a change in the temperature of a body or system.\n\n' +
+    //       '3. Heat capacity: Heat capacity is the amount of heat required to raise the temperature of a system by 1 degree Kelvin (K). It is a measure of the ability of a material to absorb and dissipate thermal energy.\n\n' +
+    //       '4. Specific heat: Specific heat is the heat required to raise the'
+    //   }
+    // ]
+    
+    // Extract the response
+    const extracted_generated_text = result[0].generated_text.split('<|assistant|>')[1].trim();
+
+    console.log(`extracted generated text: ${extracted_generated_text}`);
+
+    return extracted_generated_text;
+
+}
+
 module.exports = {
     embeddTextHF,
-    createGlobalEmbeddingPipeline
-
+    createGlobalPipelines,
+    generateTextHF,
 };
