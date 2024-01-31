@@ -29,6 +29,13 @@
     text-align: left;
 
   }
+
+  .text h3 {
+    margin: 0;
+    font-size: 1.2rem; /* Adjust the size as necessary */
+    text-align: left;
+    color: #666666; /* Lighter color for the description */
+  }
   
   .text p {
     margin: 0;

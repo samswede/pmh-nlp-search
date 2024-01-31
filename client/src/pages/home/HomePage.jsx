@@ -19,27 +19,25 @@ import { Navbar,
         
         Image } from '@nextui-org/react'
 
-import FontSearchResultsScrollable from './font_search_results_scrollable/FontSearchResultsScrollable';
+import PostSearchResultsScrollable from './post_search_results_scrollable/PostSearchResultsScrollable';
 
-import TestONNXButton from '../../base/buttons/TestButtonONNX';
 
 import SearchBar from '../../base/search/SearchBar';
-import FontMap from './font_map/FontMap';
+
 
 import Favicon from '../../assets/favicon.jpg';
-import FontMapImage from './connected_papers_graph.png'
 
-import useGetFonts from '../../hooks/useGetFonts';
-import useSearchSimilarFonts from '../../hooks/useSearchSimilarFonts';
 
-import * as onnx from 'onnxjs';
+import useGetPosts from '../../hooks/useGetPosts';
+import useSearchSimilarPosts from '../../hooks/useSearchSimilarPosts';
+
 
 export default function HomePage() {
 
-    const [selectedFont, setSelectedFont] = React.useState("ABeeZee");
-    const similarFonts = useSearchSimilarFonts(selectedFont); // Using the hook here
+    const [selectedPost, setSelectedPost] = React.useState(1); // index 1 is the default post
+    const similarPosts = useSearchSimilarPosts(selectedPost); // Using the hook here
 
-    const fonts = useGetFonts();
+    const posts = useGetPosts();
 
     /*
     try {
@@ -103,14 +101,14 @@ export default function HomePage() {
                         setValue={setFont}/>
                     */}
                     <Autocomplete 
-                        label="Select a Font" 
-                        selectedKeys={selectedFont}
+                        label="Select a Post" 
+                        selectedKeys={selectedPost}
                         className="max-w-xs"
-                        onSelectionChange={setSelectedFont}
+                        onSelectionChange={setSelectedPost}
                     >
-                        {fonts.map((font) => (
-                        <AutocompleteItem key={font.name} value={font.name}>
-                            {font.name}
+                        {posts.map((post) => (
+                        <AutocompleteItem key={post.index} value={post.index}>
+                            {post.index}
                         </AutocompleteItem>
                         ))}
                     </Autocomplete>
@@ -138,15 +136,15 @@ export default function HomePage() {
 
                     <h1>Results</h1>
 
-                    <FontSearchResultsScrollable
-                        searchResultsData={similarFonts}
+                    <PostSearchResultsScrollable
+                        searchResultsData={similarPosts}
                         />
                     
 
 
                 </div>
                 <div className={styles.fontMapContainer}>
-                    {/*}
+                    {/*
                     <Image 
                         src={FontMapImage} 
                         
