@@ -1,5 +1,9 @@
-import { Card, Image } from '@nextui-org/react';
-import styles from '../../../base/scrollables/ScrollableItem.module.css';
+import {    Card,
+            Accordion,
+            AccordionItem } from '@nextui-org/react';
+import styles from './ScrollablePostItem.module.css';
+
+
 
 export default function ScrollablePostItem({ index, title, description, author}) {
 
@@ -8,8 +12,9 @@ export default function ScrollablePostItem({ index, title, description, author})
             isPressable
             className={styles.card}>
             <div className={styles.content}>
+                {/*
                 <div className={styles.imageContainer}>
-                    {/*
+                    
                     
                     <Image 
                         isZoomed
@@ -17,13 +22,22 @@ export default function ScrollablePostItem({ index, title, description, author})
                         className={styles.image}
                     />
 
-                    */}
+                    
                     
                 </div>
+                */}
                 <div className={styles.text}>
                     <h2>{title}</h2>
-                    <h3>Index: {index}, Author: {author}</h3>
-                    <p>{description}</p>
+                </div>
+                <div>
+                    <Accordion variant="splitted">
+                        <AccordionItem key="1" aria-label="Accordion 1" title={title}>
+                            <div className={styles.text}>
+                                <h3>Index: {index}, Author: {author}</h3>
+                                <p>{description}</p>
+                            </div>
+                        </AccordionItem>
+                    </Accordion>
                 </div>
                 
             </div>
