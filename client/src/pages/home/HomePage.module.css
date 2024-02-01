@@ -16,6 +16,16 @@
     background-color: #000000;
 }
 
+.thirdContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 90vw;
+    height: 85vh;
+    background-color: #000000;
+}
+
 .searchContainer {
     display: flex;
     flex-direction: column;

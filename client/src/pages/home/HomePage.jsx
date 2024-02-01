@@ -23,37 +23,29 @@ import PostSearchResultsScrollable from './post_search_results_scrollable/PostSe
 
 import ScrollablePostItem from './post_search_results_scrollable/ScrollablePostItem';
 
-import SearchBar from '../../base/search/SearchBar';
-
+//import SearchBar from '../../base/search/SearchBar';
+import SearchInput from './search/SearchInput';
 
 import Favicon from '../../assets/favicon.jpg';
 
 
 import useGetPosts from '../../hooks/useGetPosts';
 import useSearchSimilarPosts from '../../hooks/useSearchSimilarPosts';
+import useSearchPostsNLP from '../../hooks/useSearchPostsNLP';
 
 
 export default function HomePage() {
 
     const [selectedPost, setSelectedPost] = React.useState(1); // index 1 is the default post
+
+    const [searchQueryValue, setSearchQueryValue] = React.useState("");
+
     const similarPosts = useSearchSimilarPosts(selectedPost); // Using the hook here
+
+    const relevantPosts = useSearchPostsNLP(searchQueryValue); // Using the hook here
 
     const posts = useGetPosts();
 
-    /*
-    try {
-        const sess = new onnx.InferenceSession();
-
-        console.log(`onnx session created...`)
-        //await sess.loadModel("../models/encoder_L12_float16.onnx");
-        const loadingModelPromise = sess.loadModel("../../../models/onnx_model.onnx");
-    
-        console.log(`model loaded`);
-    } catch (e) {
-        console.log(`error loading ONNX model: ${e}`);
-    }
-
-    */
 
     const example_post_data = {
         "_id": "65b76d7c9188afb0c1f2a8a2",
@@ -493,20 +485,10 @@ export default function HomePage() {
 
             {/* App starts here */}
             <main className={styles.secondContainer}>
-                <div>
-                    <ScrollablePostItem 
-                        index={example_post_data.index}
-                        title={example_post_data.title}
-                        description={example_post_data.description}
-                        author={example_post_data.author}
-                    />
-                </div>
+
                 <div className={styles.searchContainer}>
-                    {/* 
-                    <SearchBar 
-                        value={font}
-                        setValue={setFont}/>
-                    */}
+
+
                     <Autocomplete 
                         label="Select a Post" 
                         selectedKeys={selectedPost}
@@ -515,7 +497,7 @@ export default function HomePage() {
                     >
                         {posts.map((post) => (
                         <AutocompleteItem key={post.index} value={post.index}>
-                            {post.index}
+                            {post.title}
                         </AutocompleteItem>
                         ))}
                     </Autocomplete>
@@ -523,25 +505,7 @@ export default function HomePage() {
                 </div>
                 <div className={styles.resultsContainer}>
 
-                    {/* 
-                    <Button
-                        
-                        color="success"
-                        auto
-                        size="small"
-                        variant="flat"
-                        onClick={() => {
-                            console.log("Selected Font:", selectedFont); // Log the new selection
-                            const results = useSearchSimilarFonts(selectedFont, similarFonts, setSimilarFonts);
-                            console.log("Similar Fonts:", results); // Log the new selection
-                        }
-                        }
-                    >
-                        Search for Similar Fonts
-                    </Button>
-                    */}
-
-                    <h1>Results</h1>
+                    <h1>Similar Posts</h1>
 
                     <PostSearchResultsScrollable
                         searchResultsData={similarPosts}
@@ -550,33 +514,30 @@ export default function HomePage() {
 
 
                 </div>
-                <div className={styles.fontMapContainer}>
-                    {/*
-                    <Image 
-                        src={FontMapImage} 
-                        
-                        />
-                    */}
-
-                    {/*
-                    <FontMap 
-                        font={font}
-                        setFont={setFont}/>
-                    */}
-                    
-                </div>
-                <div className={styles.carouselContainer}>
-
-                </div>
-                <div className={styles.canvasContainer}>
-                    {/*
-                        <TestONNXButton />
-                    */}
-                    
-                </div>
-
                 
+            </main>
 
+            <main className={styles.thirdContainer}>
+
+                <div className={styles.searchContainer}>
+
+                    <SearchInput 
+                        searchQueryValue= {searchQueryValue}
+                        setSearchQueryValue={setSearchQueryValue}/>
+
+                </div>
+                <div className={styles.resultsContainer}>
+
+                    <h1>Relevant Results</h1>
+
+                    <PostSearchResultsScrollable
+                        searchResultsData={relevantPosts}
+                        />
+                    
+
+
+                </div>
+                
             </main>
 
         </main>

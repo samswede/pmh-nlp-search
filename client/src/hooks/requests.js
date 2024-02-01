@@ -31,9 +31,26 @@ async function httpGetSimilarPostsFromIndex(index, numCandidates, limit) {
 }
 
 
+// Get similar fonts by name
+async function httpPostSearchPostsNLP(text, numCandidates, limit) {
+  const response = await fetch(`${API_URL}/posts/query-text`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      text: text,
+      numCandidates: numCandidates,
+      limit: limit,
+    }),
+  });
+  
+  return await response.json();
+}
 
 
 export {
   httpGetPosts,
   httpGetSimilarPostsFromIndex,
+  httpPostSearchPostsNLP,
 };
