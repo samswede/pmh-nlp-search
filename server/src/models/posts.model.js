@@ -13,7 +13,7 @@ function loadPostsData() {
     console.log('Loading posts...');
 
     return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, '..', '..', 'data', 'posts_collection_data.json'), 'utf8', async (err, data) => {
+        fs.readFile(path.join(__dirname, '..', '..', 'data', 'processed_posts_collection_data.json'), 'utf8', async (err, data) => {
             if (err) {
                 console.error(err);
                 return reject(err);
@@ -29,7 +29,7 @@ function loadPostsData() {
 
                     // just test embedding with 5 posts
                     i++;
-                    if (i > 400) {
+                    if (i > 405) {
                         break;
                     }
 
@@ -65,7 +65,7 @@ async function areAllPostsLoaded() {
 
     console.log(`Number of posts already loaded: ${numPostsAlreadyLoaded}`);
 
-    if (numPostsAlreadyLoaded > 200) {
+    if (numPostsAlreadyLoaded > 402) {
         console.log('All posts are already loaded!');
         return true;
     } else {
